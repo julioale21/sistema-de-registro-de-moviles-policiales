@@ -1,0 +1,6 @@
+[submodule "policia-chubut-srmp"]
+	path = policia-chubut-srmp
+	url = https://github.com/julioale21/policia-chubut-srmp.git
+[submodule "policia-chubut-srmp-frontend"]
+	path = policia-chubut-srmp-frontend
+	url = https://github.com/julioale21/policia-chubut-srmp-frontend.git
