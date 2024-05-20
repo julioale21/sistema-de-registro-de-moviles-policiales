@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  policia-db:
+    image: postgres:14.3
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    container_name: postgres-policia
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  policia-backend:
+    build: ./policia-chubut-srmp
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./policia-chubut-srmp/src:/usr/src/app/src
+    command: yarn start:dev
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_HOST=policia-db
+      - PORT=${PORT}
+    depends_on:
+      policia-db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  policia-frontend:
+    build: ./policia-chubut-srmp-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./policia-chubut-srmp-frontend/src:/usr/src/app/src
+    command: yarn dev
