@@ -29,17 +29,25 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USERNAME=${DB_USERNAME}
       - DB_HOST=policia-db
-      - PORT=${PORT}
+      - PORT=3001
+      - CORS_ORIGIN=*
     depends_on:
       policia-db:
         condition: service_healthy
     env_file:
       - .env
 
-  policia-frontend:
-    build: ./policia-chubut-srmp-frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./policia-chubut-srmp-frontend/src:/usr/src/app/src
-    command: yarn dev
+  # policia-frontend:
+  #   build: ./policia-chubut-srmp-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+  #     - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+  #     - NEXTAUTH_URL=policia-backend:3000
+  #     - PORT=3000
+  #   volumes:
+  #     - ./policia-chubut-srmp-frontend/src:/usr/src/app/src
+  #   command: yarn dev
+  #   env_file:
+  #     - .env
